@@ -1,0 +1,29 @@
+.dispaly {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  background-color: white;
+  box-shadow: 5px 5px black;
+  border-radius: 10px;
+  width: 50%;
+  height: 80%;
+  margin:5% 25% 5% 25%;
+}
+.allignment {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+.btn{
+  position: relative;
+  bottom:10px;
+}
+header{
+  position: relative;
+  top: 10px;
+}

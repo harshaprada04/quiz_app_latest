@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "language": "Hindi",
+    "question": "भारत की राजधानी क्या है?",
+    "questionType": "multiple choice",
+    "option": ["दिल्ली", "बैंगलोर", "मुंबई", "राजकोट"],
+    "isAnswered": false,
+    "actualAnswer": "दिल्ली",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 2,
+    "language": "Hindi",
+    "question": "रियेक्ट में सहारा अपरिवर्तनीय है",
+    "questionType": "True or False",
+    "option": ["सत्य", "असत्य"],
+    "isAnswered": false,
+    "actualAnswer": "सत्य",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 3,
+    "language": "Hindi",
+    "question": "वर्तमान जावास्क्रिप्ट संस्करण है-",
+    "questionType": "Fill in The Blank",
+    "option": [],
+    "isAnswered": false,
+    "actualAnswer": "ES7",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 4,
+    "language": "Hindi",
+    "question1": ["a.रियेक्ट","b.जावास्क्रिप्ट","c.प्राप","d.स्टेट"],
+    "question2": ["1.अपरिवर्तनीय","2.परिवर्तनशील","3.कथात्मक","4.अनिवार्य"],
+    "questionType": "match the following",
+    "option": ["a-3,b-4,c-1,d-2","a-2,b-3,c-1,d-4","a-1,b-3,c-2,d-4","a-3,b-2,c-4,d-1"],
+    "isAnswered": false,
+    "actualAnswer": "a-3,b-4,c-1,d-2",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 5,
+    "language": "Hindi",
+    "question": "जावास्क्रिप्ट है- (नीचे दिए गए विकल्पों में एक से अधिक सही उत्तर हैं)",
+    "questionType": "multi select",
+    "option": ["एक समय का","सिंगल थ्रेडेड", "अतुलनीय", "घोषणात्मक", "मल्टी थ्रेडेड"],
+    "isAnswered": false,
+    "actualAnswer": ["सिंक्रोनस", "सिंगल थ्रेडेड"],
+    "selectedAnswer": ""
+  }
+]

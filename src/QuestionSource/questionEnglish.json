@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "language": "English",
+    "question": "What is the captail of india?",
+    "questionType": "multiple choice",
+    "option": ["Delhi", "Bangalore", "Mumbai", "Rajkot"],
+    "isAnswered": false,
+    "actualAnswer": "Delhi",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 2,"language": "English",
+    "question": "props in react is immutable",
+    "questionType": "True or False",
+    "option": ["True", "False"],
+    "isAnswered": false,
+    "actualAnswer": "True",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 3,
+    "language": "English",
+    "question": "Current JavaScript Version is-",
+    "questionType": "Fill in The Blank",
+    "option": [],
+    "isAnswered": false,
+    "actualAnswer": "ES7",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 4,
+    "language": "English",
+    "question1": ["a.React","b.JavaScript","c.props","d.state"],
+    "question2": ["1.Immuttable","2.Muttable","3.Declartive","4.imperative"],
+    "questionType": "match the following",
+    "option": ["a-3,b-4,c-1,d-2","a-2,b-3,c-1,d-4","a-1,b-3,c-2,d-4","a-3,b-2,c-4,d-1"],
+    "isAnswered": false,
+    "actualAnswer": "a-3,b-4,c-1,d-2",
+    "selectedAnswer": ""
+  },
+  {
+    "id": 5,
+    "language": "English",
+    "question": "JavaScript is- (in below options more than one correct answer is there)",
+    "questionType": "multi select",
+    "option": ["Synchronous","Single Threaded","Asynchronous","Declarative","Multi Threaded"],
+    "isAnswered": false,
+    "actualAnswer": ["Synchronous","Single Threaded"],
+    "selectedAnswer": []
+  }
+]
