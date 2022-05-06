@@ -1,131 +1,116 @@
 import { useNavigate } from "react-router";
-import React, { useState, ChangeEvent } from "react";
-import { useContext } from "react";
-import Context from "../Contexts/contexts";
+import React, { useState } from "react";
 import classes from "./homepage.module.css";
-import { HomePageDetails } from "../Interface/interface";
 import {
   FormControl,
   TextField,
-  InputLabel,
-  Select,
-  MenuItem,
-  Container,
   Button,
+  Container,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Typography,
 } from "@mui/material";
 
-
 function HomePage() {
-  const [userDetails, setUserDetails] = useState<HomePageDetails>({
-    firstName: "",
-    lastName: "",
-    gender: "",
-    prefferedLanguage: "",
-  });
+  const [name, setName] = useState<string>("");
+  const [prefferedLanguage, setPrefferedLanguage] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+
   const navigate = useNavigate();
-  const context = useContext(Context);
 
-  function clickHandler() {
-    navigate("/question/:questionId");
-    if (userDetails.prefferedLanguage.length > 0) {
-      return context.setSelectedLanguage(userDetails.prefferedLanguage);
-    }
-  }
+  const handleSubmit = () => {
+    navigate(`/questionsPage/`, {
+      state: {
+        prefferedLanguage: prefferedLanguage,
+      },
+    });
+  };
+
   return (
-      <div className={classes.dispaly}>
-        <header>Login</header>
-        <Container >
-          <div className={classes.allignment}>
-            <TextField
-            name= "firstname"
-            sx={{ minWidth: 220 }}
-              id="outlined-basic"
-              label="First Name"
-              variant="outlined"
-              onChange={(e) =>
-                setUserDetails((prev) => ({
-                  ...prev,
-                  firstName: e.target.value,
-                }))
-              }
-              value={userDetails.firstName}
-              autoComplete="off"
-            />
-            <TextField
-            sx={{ minWidth: 220 }}
-              id="outlined-basic"
-              label="Last Name"
-              variant="outlined"
-              onChange={(e) =>
-                setUserDetails((prev) => ({
-                  ...prev,
-                  lastName: e.target.value,
-                }))
-              }
-              value={userDetails.lastName}
-              autoComplete="off"
-            />
+    <div className={classes.dispaly}>
+      <header>Login</header>
+      <Container>
+        <div className={classes.allignment}>
+          <TextField
+            sx={{ width: 220 }}
+            id="outlined-basic"
+            label="Name"
+            variant="outlined"
+            onChange={(e) => setName(e.target.value)}
+            value={name}
+            autoComplete="off"
+          />
 
-            <FormControl sx={{ minWidth: 220 }}>
-              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-              <Select
-              inputProps={{ "data-testid": "gender-selection" }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={userDetails.gender}
-                label="Gender"
-                onChange={(e) =>
-                  setUserDetails((prev) => ({
-                    ...prev,
-                    gender: e.target.value,
-                  }))
+          <FormControl style={{ width: 100 }} margin="normal">
+            <Typography>Gender</Typography>
+            <RadioGroup
+              data-testid="gender"
+              onChange={(e) => {
+                setGender(e.target.value);
+              }}
+              value={gender}
+            >
+              <FormControlLabel
+                label={"Male"}
+                control={<Radio value={"Male"} checked={gender === "Male"} />}
+              />
+              <FormControlLabel
+                label={"Female"}
+                control={
+                  <Radio value={"Female"} checked={gender === "Female"} />
                 }
-              >
-                <MenuItem value="Male">Male</MenuItem>
-                <MenuItem value="Female">Female</MenuItem>
-                <MenuItem value="Others">Others</MenuItem>
-              </Select>
-            </FormControl>
+              />
+              <FormControlLabel
+                label={"Other"}
+                control={<Radio value={"Other"} checked={gender === "Other"} />}
+              />
+            </RadioGroup>
+          </FormControl>
 
-            <FormControl sx={{ minWidth: 220 }}>
-              <InputLabel id="demo-simple-select-label">Language</InputLabel>
-              <Select
-              inputProps={{ "data-testid": "language-selection" }}
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={userDetails.prefferedLanguage}
-                label="Language"
-                onChange={(e) =>
-                  setUserDetails((prev) => ({
-                    ...prev,
-                    prefferedLanguage: e.target.value,
-                  }))
+          <FormControl style={{ width: 100 }} margin="normal">
+            <Typography>Language</Typography>
+            <RadioGroup
+              data-testid={"Language"}
+              onChange={(e) => {
+                setPrefferedLanguage(e.target.value);
+              }}
+              value={prefferedLanguage}
+            >
+              <FormControlLabel
+                label={"English"}
+                control={
+                  <Radio
+                    value={"English"}
+                    checked={prefferedLanguage === "English"}
+                  />
                 }
-              >
-                <MenuItem  value="English">English</MenuItem>
-                <MenuItem value="Hindi">Hindi</MenuItem>
-              </Select>
-            </FormControl>
-            </div>
-        </Container>
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={
-            !(
-              userDetails.prefferedLanguage &&
-              userDetails.firstName &&
-              userDetails.lastName
-            )
-          }
-          className={classes.btn}
-          name="submit"
-          type="submit"
-          onClick={clickHandler}
-        >
-          Submit
-        </Button>
-      </div>
+              />
+              <FormControlLabel
+                label={"Hindi"}
+                control={
+                  <Radio
+                    value={"Hindi"}
+                    checked={prefferedLanguage === "Hindi"}
+                  />
+                }
+              />
+            </RadioGroup>
+          </FormControl>
+        </div>
+      </Container>
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={!(name && gender && prefferedLanguage)}
+        className={classes.btn}
+        name="submit"
+        type="submit"
+        onClick={handleSubmit}
+      >
+        Submit
+      </Button>
+    </div>
   );
 }
 

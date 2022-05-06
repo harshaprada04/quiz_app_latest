@@ -1,123 +1,268 @@
-import React, { useContext, useEffect, useState, ChangeEvent } from "react";
-import { useNavigate, useParams } from "react-router";
-import Context from "../Contexts/contexts";
-import FiilInTheBlankQuestion from "./FillInTheBlank";
-import MatchTheFollowingQuestion from "./MatchTheFolloingQuestion";
-import MultipleChoiceQuestion from "./MultipleChoiceQuestion";
-import MultiSelectQuestion from "./MultiSelectQuestion";
-import TrueOrFalseQuestion from "./TrueOrFalse";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { useLocation } from "react-router-dom";
 import classes from "./QuestionListPage.module.css";
-import { Button } from "@mui/material";
-import { FetchQuestionList } from "../actions/questions";
+import { Details } from "../Interface/interface";
+import {
+  Button,
+  Checkbox,
+  TextField,
+  Typography,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Radio,
+  RadioGroup,
+  Container,
+} from "@mui/material";
+import questionEnglish from "../QuestionSource/questionEnglish.json";
+import questionHindi from "../QuestionSource/questionHindi.json";
 
 const QuestionListPage = () => {
+  const [questionList, setQuestionList] = useState<any>([]);
+  const [qNum, setqNum] = useState<number>(0);
+  const location: any = useLocation();
+  const { prefferedLanguage } = location?.state;
   const navigate = useNavigate();
-  const { questionId } = useParams();
-  console.log(questionId)
-  const qId = questionId ? parseInt(questionId) : 0;
-  const [isLastQuestion, setIsLastQuestion] = useState<boolean>(false);
-  const [questionDetails, setQuestionDetails] = useState<any>({});
-  const [submittedAnswer, setSubmittedAnswer] = useState("");
-  const contexts = useContext(Context);
 
-  const fetechQuestions = async () => {
-    const questions: any = await FetchQuestionList(contexts.selectedLanguage);
-    await contexts.setQuestionList(questions);
-    navigate(`/question/${questions[0].id}`);
+  const questionDetails = async () => {
+    if (prefferedLanguage === "English") {
+      await setQuestionList(questionEnglish);
+    } else {
+      await setQuestionList(questionHindi);
+    }
   };
 
   useEffect(() => {
-    fetechQuestions();
-  }, []);
+    questionDetails();
+  }, [prefferedLanguage]);
 
-  useEffect(() => {
-    contexts.changeHandler(qId, submittedAnswer);
-  }, [submittedAnswer]);
-
-  const question = async () => {
-    const details: any = await contexts.getQuestionById(qId);
-    setQuestionDetails(details);
-    await setSubmittedAnswer(details.selectedAnswer);
-
-    const position =
-      contexts.questionList.findIndex(
-        (question: any) => details.id === question.id
-      ) + 1;
-    setIsLastQuestion(position === contexts.questionList.length);
-  };
-
-  useEffect(() => {
-    question();
-    return () => {
-      setSubmittedAnswer("");
-    };
-  }, [qId]);
-
-  const navigateToNext = async (id: any) => {
-    navigate(`/question/${id}`);
-  };
-
-  const getQuestionDetailsBasedOnType = () => {
-    switch (questionDetails.questionType) {
+  const getQuestionDetailsBasedOnType = (qNum: number) => {
+    switch (questionList[qNum]?.questionType) {
       case "multiple choice":
         return (
-          <MultipleChoiceQuestion
-            questionDetails={questionDetails}
-            clickHandler={(e: ChangeEvent<HTMLInputElement>) => {
-              setSubmittedAnswer(e.target.value);
-            }}
-            submittedAnswer={submittedAnswer}
-          />
+          <FormControl>
+            <RadioGroup>
+              {questionList[qNum]?.option.map((option: [], index: number) => {
+                return (
+                  <FormControlLabel
+                    key={index}
+                    value={option}
+                    label={option}
+                    control={
+                      <Radio
+                        data-testid={`mcq-${index}`}
+                        checked={questionList[qNum]?.selectedAnswer === option}
+                        onChange={() => {
+                          setQuestionList(
+                            questionList.map((data: any, index: number) => {
+                              if (index === qNum) {
+                                return {
+                                  ...data,
+                                  isAnswered: true,
+                                  selectedAnswer: option,
+                                };
+                              } else {
+                                return data;
+                              }
+                            })
+                          );
+                        }}
+                      />
+                    }
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
         );
       case "True or False":
         return (
-          <TrueOrFalseQuestion
-            questionDetails={questionDetails}
-            clickHandler={(e: ChangeEvent<HTMLInputElement>) => {
-              setSubmittedAnswer(e.target.value);
-            }}
-            submittedAnswer={submittedAnswer}
-          />
+          <FormControl>
+            <RadioGroup>
+              {questionList[qNum]?.option.map((option: any, index: number) => {
+                return (
+                  <FormControlLabel
+                    key={index}
+                    label={option}
+                    value={option}
+                    control={
+                      <Radio
+                        data-testid={`tfq-${index}`}
+                        checked={questionList[qNum]?.selectedAnswer === option}
+                        onChange={() => {
+                          setQuestionList(
+                            questionList?.map((data: any, index: number) => {
+                              if (index === qNum) {
+                                return {
+                                  ...data,
+                                  isAnswered: true,
+                                  selectedAnswer: option,
+                                };
+                              } else {
+                                return data;
+                              }
+                            })
+                          );
+                        }}
+                      />
+                    }
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
         );
       case "Fill in The Blank":
         return (
-          <FiilInTheBlankQuestion
-            questionDetails={questionDetails}
-            changeHandler={(e: ChangeEvent<HTMLInputElement>) =>
-              setSubmittedAnswer(e.target.value)
-            }
-            submittedAnswer={submittedAnswer}
+          <TextField
+            fullWidth
+            placeholder={"Please enter your answer"}
+            variant={"standard"}
+            value={questionList[qNum].selectedAnswer}
+            onChange={(e) => {
+              setQuestionList(
+                questionList?.map((data: any, index: number) => {
+                  if (index === qNum) {
+                    return {
+                      ...data,
+                      isAnswered: true,
+                      selectedAnswer: e.target.value,
+                    };
+                  } else {
+                    return data;
+                  }
+                })
+              );
+            }}
           />
         );
       case "match the following":
         return (
-          <MatchTheFollowingQuestion
-            questionDetails={questionDetails}
-            changeHandler={setSubmittedAnswer}
-            submittedAnswer={submittedAnswer}
-          />
+          <Container>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                {questionList[qNum]?.left.map((data: [], index: number) => {
+                  return (
+                    <Typography
+                      key={index}
+                      style={{ display: "block", marginTop: "10px" }}
+                      data-testid={`left-${index}`}
+                    >
+                      {data}
+                    </Typography>
+                  );
+                })}
+              </div>
+              <div style={{ paddingLeft: "50px" }}>
+                {questionList[qNum]?.right.map((data: [], index: number) => {
+                  return (
+                    <Typography
+                      key={index}
+                      style={{ marginTop: "10px", display: "block" }}
+                      data-testid={`left-${index}`}
+                    >
+                      {data}
+                    </Typography>
+                  );
+                })}
+              </div>
+            </div>
+            <FormControl>
+              <RadioGroup style={{ marginLeft: "45px", marginTop: "10px" }}>
+                {questionList[qNum]?.option.map((option: [], index: number) => {
+                  return (
+                    <FormControlLabel
+                      key={index}
+                      label={option}
+                      value={option}
+                      control={
+                        <Radio
+                          data-testid={`mfg-${index}`}
+                          checked={
+                            option === questionList[qNum]?.selectedAnswer
+                          }
+                          onChange={() => {
+                            setQuestionList(
+                              questionList?.map((data: any, index: number) => {
+                                if (index === qNum) {
+                                  return {
+                                    ...data,
+                                    isAnswered: true,
+                                    selectedAnswer: option,
+                                  };
+                                } else {
+                                  return data;
+                                }
+                              })
+                            );
+                          }}
+                        />
+                      }
+                    />
+                  );
+                })}
+              </RadioGroup>
+            </FormControl>
+          </Container>
         );
       case "multi select":
         return (
-          <MultiSelectQuestion
-            questionDetails={questionDetails}
-            changeHandler={(data: any) =>
-              setSubmittedAnswer((prev: any) => {
-                if (prev && prev.length) {
-                  const index = prev.findIndex((elem: any) => elem === data);
-                  if (index < 0) {
-                    return [...prev, data];
-                  } else {
-                    prev.splice(index, 1);
-                    return prev;
-                  }
-                } else {
-                  return [data];
-                }
-              })
-            }
-            submittedAnswer={submittedAnswer}
-          />
+          <FormControl>
+            <RadioGroup>
+              {questionList[qNum]?.option.map((option: [], index: number) => {
+                return (
+                  <FormControlLabel
+                    key={index}
+                    label={option}
+                    value={option}
+                    control={
+                      <Checkbox
+                        data-testid={`msq-${index}`}
+                        onChange={(e) => {
+                          setQuestionList(
+                            questionList?.map((data: any, index: number) => {
+                              if (index === qNum) {
+                                return {
+                                  ...data,
+                                  selectedAnswer: questionList?.[
+                                    qNum
+                                  ]?.selectedAnswer?.includes(e.target.value)
+                                    ? typeof questionList?.[qNum]
+                                        ?.selectedAnswer !== "string" &&
+                                      questionList?.[
+                                        qNum
+                                      ]?.selectedAnswer?.filter(
+                                        (q: string) => q !== e.target.value
+                                      )
+                                    : questionList?.[
+                                        qNum
+                                      ]?.selectedAnswer.concat(e.target.value),
+                                  isAnswered: true,
+                                };
+                              } 
+                              else {
+                                return data;
+                              }
+                            })
+                          );
+                        }}
+                        checked={questionList[qNum]?.selectedAnswer.includes(
+                          option
+                        )}
+                      />
+                    }
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
         );
       default:
         break;
@@ -125,45 +270,58 @@ const QuestionListPage = () => {
   };
 
   return (
-    <div className={classes.main_heading}>
-      <div>
+    <Container>
+      <div className={classes.main_heading}>
         <div className={classes.heading} data-testid="main-div">
-          {contexts.questionList.map((question: any, index) => (
+          {questionList.map((question: any, index: number) => (
             <div
               data-testid={`main-${index}`}
               className={classes.question_number}
               style={{
                 background: question.isAnswered ? "red" : "#ccc",
               }}
-              key={question.id}
+              key={index}
               onClick={() => {
-                navigateToNext(question.id);
+                setqNum(index);
               }}
             >
               {index + 1}
             </div>
           ))}
         </div>
-      </div>
-      <div>{getQuestionDetailsBasedOnType()}</div>
-      <div className={classes.btn}
-      >
-        {isLastQuestion && (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "10px",
+            marginTop: "25px",
+          }}
+        >
+          <div>{questionList[qNum]?.question}</div>
+          <div>{getQuestionDetailsBasedOnType(qNum)}</div>
+        </div>
+        {questionList[qNum]?.id === questionList.length && (
           <Button
-          data-testid="btn"
+            className={classes.btn}
+            data-testid="btn"
             variant="contained"
             color="primary"
             name="submit"
             type="submit"
             onClick={() => {
-              navigate("/result");
+              navigate("/result", {
+                state: {
+                  questionList: questionList,
+                },
+              });
             }}
           >
             Submit
           </Button>
         )}
       </div>
-    </div>
+    </Container>
   );
 };
 

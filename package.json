@@ -29,7 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --silent --watchAll --coverage",
     "eject": "react-scripts eject",
     "coverage": "jest--collect-coverage"
   },
@@ -57,5 +57,12 @@
   "devDependencies": {
     "@testing-library/react": "^13.1.1",
     "jest": "^28.0.2"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/index.tsx",
+      "!src/reportWebVitals.ts"
+    ]
   }
 }

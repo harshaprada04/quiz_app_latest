@@ -3,17 +3,14 @@ import { type } from "os";
 export type Details = {
   id: number;
   language: string;
-  question: string;
+  question?: string;
   questionType: string;
-  option: [];
+  option?: any;
   isAnswered: boolean;
-  actualAnswer: string;
-  selectedAnswer: string;
+  actualAnswer: any;
+  selectedAnswer: any;
+  left?: [];
+  right?:[];
+  isCorrectAns:boolean
 };
 
-export type HomePageDetails = {
-  firstName: string;
-  lastName: string;
-  gender: string;
-  prefferedLanguage: string;
-};

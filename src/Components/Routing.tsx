@@ -8,8 +8,7 @@ function Routing() {
     <div>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/question/:questionId/*" element={<QuestionListPage />} />
-
+        <Route path="/questionsPage" element={<QuestionListPage />} />
         <Route path="/result" element={<SubmitHandler />} />
       </Routes>
     </div>
